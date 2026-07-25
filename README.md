@@ -1,0 +1,2 @@
+# FuckAnthropic
+FUUUUUUUUCK Anthropic
