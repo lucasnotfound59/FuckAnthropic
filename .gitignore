@@ -1,0 +1,10 @@
+.venv/
+runs/
+*.pt
+results.csv
+data.yaml
+main_executed.ipynb
+nohup.out
+__pycache__/
+.DS_Store
+.ipynb_checkpoints/
