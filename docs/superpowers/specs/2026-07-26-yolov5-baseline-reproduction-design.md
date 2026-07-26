@@ -10,6 +10,19 @@ end to end and produce repeatable validation metrics.
 This phase does not attempt to improve leaderboard performance or redesign the
 competition submission format.
 
+## Competition Evaluation Metric
+
+The competition evaluates submissions with the F1 score:
+
+`F1 = 2 × precision × recall / (precision + recall)`.
+
+Strict baseline reproduction keeps the supplied checkpoint-selection fitness,
+which is dominated by mAP50-95, because changing it would change the baseline.
+Standalone validation must additionally report the aggregate F1 derived from
+its precision and recall so the reproduced run can be interpreted against the
+competition metric. Confidence-threshold tuning for a competitive submission
+is a follow-up experiment, not part of strict reproduction.
+
 ## Current Repository State
 
 The dataset is stored at the repository root under `bdd100k_selected`:
@@ -137,6 +150,7 @@ Each run uses a distinct name and produces:
 - effective command and configuration;
 - `last.pt` and `best.pt`;
 - validation metrics;
+- aggregate F1 computed from validation precision and recall;
 - per-class metrics from the final `best.pt` validation;
 - timing and device information;
 - generated diagnostic plots when supported.
@@ -176,7 +190,7 @@ The reproduction phase is complete when:
 4. The exact 30-epoch full-run command is verified against the canonical
    dataset configuration.
 5. If a CUDA machine is available, the full run completes and reports overall
-   and per-class P, R, mAP50, and mAP50-95.
+   and per-class P, R, mAP50, and mAP50-95, plus aggregate F1.
 
 Full-run metrics are not required to match an unpublished reference score
 exactly, but all configuration, seed, dataset, and environment differences must
