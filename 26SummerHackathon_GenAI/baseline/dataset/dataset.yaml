@@ -1,0 +1,16 @@
+train: dataset/bdd10k_selected/images/train
+val: dataset/bdd10k_selected/images/val
+test: dataset/bdd10k_selected/images/test
+
+nc: 9
+
+names:
+  0: 'person'
+  1: 'rider'
+  2: 'car'
+  3: 'truck'
+  4: 'bus'
+  5: 'motorcycle'
+  6: 'bicycle'
+  7: 'traffic light'
+  8: 'traffic sign'
