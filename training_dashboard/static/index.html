@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>RF-DETR · Live Training</title>
+    <meta
+      name="description"
+      content="RF-DETR-2XL BDD100K 实时训练监控、F1、mAP、损失和 GPU 状态。"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="masthead">
+        <div>
+          <div class="eyebrow"><span class="pulse"></span>LIVE EXPERIMENT</div>
+          <h1><span id="modelName">RF-DETR-2XL</span><span> · Training Observatory</span></h1>
+          <p id="subline">每 3 秒自动刷新 · 正在连接训练实例</p>
+        </div>
+        <div class="headline-score">
+          <span>BEST HOLDOUT TARGET</span>
+          <strong>0.95</strong>
+        </div>
+      </header>
+
+      <section class="hero-grid" aria-label="训练摘要">
+        <article class="card status-card">
+          <span class="label">运行状态</span>
+          <div class="status-line">
+            <span id="statusDot" class="status-dot"></span>
+            <strong id="statusText">连接中</strong>
+          </div>
+          <small id="processText">等待指标</small>
+        </article>
+        <article class="card metric-card">
+          <span class="label">Epoch</span>
+          <strong><span id="epoch">—</span><em> / </em><span id="totalEpochs">100</span></strong>
+          <small id="epochBest">尚无最佳轮次</small>
+        </article>
+        <article class="card metric-card feature">
+          <span class="label">当前验证 F1</span>
+          <strong id="currentF1">—</strong>
+          <small id="bestF1">最佳 —</small>
+        </article>
+        <article class="card metric-card">
+          <span class="label">mAP 50–95</span>
+          <strong id="map5095">—</strong>
+          <small id="map50">mAP50 —</small>
+        </article>
+        <article class="card metric-card">
+          <span class="label">Precision / Recall</span>
+          <strong class="split-value"><span id="precision">—</span><i>/</i><span id="recall">—</span></strong>
+          <small>控制误检与漏检</small>
+        </article>
+        <article class="card gpu-card">
+          <span class="label">GPU</span>
+          <strong id="gpuUsage">—</strong>
+          <div class="gpu-meta"><span id="gpuMemory">显存 —</span><span id="gpuTemp">温度 —</span></div>
+        </article>
+      </section>
+
+      <section class="progress-panel">
+        <div class="section-heading">
+          <div>
+            <span class="label">训练进度</span>
+            <strong id="progressLabel">等待训练日志</strong>
+          </div>
+          <span id="lastUpdate">—</span>
+        </div>
+        <div class="progress-track" aria-label="训练进度">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+        <div id="milestones" class="milestones"></div>
+      </section>
+
+      <section class="charts-grid">
+        <article class="panel chart-panel chart-wide">
+          <div class="section-heading">
+            <div><span class="label">核心指标</span><strong>F1 · Precision · Recall</strong></div>
+            <span class="legend"><i class="red"></i>F1 <i class="blue"></i>P <i class="mint"></i>R</span>
+          </div>
+          <canvas id="f1Chart" aria-label="F1 Precision Recall 曲线"></canvas>
+        </article>
+        <article class="panel chart-panel">
+          <div class="section-heading">
+            <div><span class="label">检测质量</span><strong>mAP</strong></div>
+            <span class="legend"><i class="blue"></i>50 <i class="orange"></i>50–95</span>
+          </div>
+          <canvas id="mapChart" aria-label="mAP 曲线"></canvas>
+        </article>
+        <article class="panel chart-panel">
+          <div class="section-heading">
+            <div><span class="label">优化过程</span><strong>训练损失</strong></div>
+            <span class="legend"><i class="mint"></i>Total <i class="violet"></i>BBox</span>
+          </div>
+          <canvas id="lossChart" aria-label="训练损失曲线"></canvas>
+        </article>
+      </section>
+
+      <section class="lower-grid">
+        <article class="panel table-panel">
+          <div class="section-heading">
+            <div><span class="label">最近轮次</span><strong>验证结果</strong></div>
+            <div class="table-actions">
+              <span id="rowCount">0 records</span>
+              <a
+                id="downloadMetrics"
+                class="metrics-link disabled"
+                aria-disabled="true"
+              >训练指标 CSV</a>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Epoch</th><th>Precision</th><th>Recall</th><th>F1</th><th>mAP50</th><th>mAP50–95</th><th>Loss</th><th>提交 CSV</th></tr>
+              </thead>
+              <tbody id="metricsRows">
+                <tr class="empty-row"><td colspan="8">等待首轮验证结果</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel config-panel">
+          <div class="section-heading">
+            <div><span class="label">实验护栏</span><strong>泛化配置</strong></div>
+          </div>
+          <div id="configChips" class="config-chips"></div>
+          <div class="holdout-note">
+            <span>HOLDOUT</span>
+            <p>目标 0.95 只以未参与训练和阈值搜索的 holdout count-F1 为准。</p>
+          </div>
+          <div class="checkpoint-block">
+            <span class="label">最新 checkpoints</span>
+            <div id="checkpoints" class="checkpoint-list"><span>尚未生成</span></div>
+          </div>
+        </article>
+      </section>
+    </main>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
